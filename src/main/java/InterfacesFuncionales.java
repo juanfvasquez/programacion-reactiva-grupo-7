@@ -1,8 +1,20 @@
+import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.List;
+import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 public class InterfacesFuncionales {
+
+    static List<String> cadenas = Arrays.asList("Hola", "Cadena 1", "Juan", "999");
+
     public static void main(String[] args) {
-        usoPredicate();
+//        usoPredicate();
+//        usoConsumer();
+//        usoSupplier();
+        usoFunction();
     }
 
     private static void usoPredicate() {
@@ -30,6 +42,64 @@ public class InterfacesFuncionales {
         Predicate<Integer> esMenorACero = x -> x < 0;
         metodoOr = esMayorA100.or(esMenorACero).test(-50);
         System.out.println("Metodo OR: " + metodoOr);
+    }
+
+    private static void usoConsumer() {
+        Consumer<String> imprimir = x -> System.out.println("Esta es la entrada: " + x);
+//        imprimir.accept("Cadena");
+//        cadenas.forEach(imprimir);
+//        cadenas.forEach(s -> System.out.println("Entrada en Lambda: " + s));
+        Consumer<String> imprimirMayusculas = s -> System.out.println("Texto en mayúsculas: " + cadenas.indexOf(s) + s.toUpperCase());
+
+//        imprimir.andThen(imprimirMayusculas).andThen(imprimir).accept("texto de prueba");
+//        imprimir.andThen(s -> System.out.println("Fin del consumer")).accept("Cadena Final");
+
+//        pasarConsumer(cadenas, imprimir);
+//        pasarConsumer(cadenas, imprimirMayusculas);
+        pasarConsumer(cadenas, s -> {
+            System.out.println("Salida totalmente diferente -> " + s);
+            System.out.println("Salida totalmente diferente -> " + s);
+        });
+    }
+
+    private static <T> void pasarConsumer(List<T> lista, Consumer<T> consumer) {
+        for (T t: lista) {
+            consumer.accept(t);
+        }
+    }
+
+    private static void usoSupplier() {
+        String idioma = "ingles";
+        Supplier<String> saludoEspanol = () -> "Hola!";
+        Supplier<String> saludoIngles = () -> "Hello!";
+
+        pasoSupplier(idioma.equals("espanol") ? () -> "Hola!" : () -> "Hi!");
+        Supplier<LocalDate> getFecha = () -> LocalDate.now();
+        System.out.println(getFecha.get());
+    }
+
+    private static void pasoSupplier(Supplier<String> saludo) {
+        System.out.println(saludo.get());
+    }
+
+    private static void usoFunction() {
+        Function<String, Integer> longitud = s -> s.length();
+//        System.out.println(longitud.apply("Cadena"));
+        Function<String, Boolean> predicate = s -> s.length() > 10;
+        Function<Integer, Integer> doble = x -> x * 2;
+        Function<Integer, String> cadena = x -> {
+            // Ejecutar cualquier proceso
+            return "Esta es la respuesta: -> " + x;
+        };
+//        System.out.println(longitud.andThen(doble).apply("Cadena"));
+        System.out.println(
+                longitud
+                        .andThen(doble)
+                        .andThen(cadena)
+                        .andThen(longitud)
+                        .andThen(x -> "Este ya es el final: " + x)
+                        .apply("Cadena")
+        );
     }
 }
 
