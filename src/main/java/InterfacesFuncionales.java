@@ -1,10 +1,7 @@
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.function.Predicate;
-import java.util.function.Supplier;
+import java.util.function.*;
 
 public class InterfacesFuncionales {
 
@@ -14,7 +11,8 @@ public class InterfacesFuncionales {
 //        usoPredicate();
 //        usoConsumer();
 //        usoSupplier();
-        usoFunction();
+//        usoFunction();
+        usoBifunction();
     }
 
     private static void usoPredicate() {
@@ -100,6 +98,21 @@ public class InterfacesFuncionales {
                         .andThen(x -> "Este ya es el final: " + x)
                         .apply("Cadena")
         );
+    }
+
+    private static void usoBifunction() {
+        BiFunction<Integer, String, String> bifunction = (x, s) -> x + ": " + s;
+//        System.out.println(bifunction.apply(10, "Esta es la cadena"));
+        BiFunction<Integer, Integer, Integer> mayor = (x, y) -> {
+            System.out.println("----- dentro de Bifunction ---------");
+            return x.compareTo(y) >= 0 ? x : y;
+        };
+//        System.out.println(mayor.apply(100, 10000));
+
+        System.out.println(mayor.andThen(x -> {
+            System.out.println("******* Dentro de Function (lambda) ********");
+            return "Después de andThen: " + x;
+        }).apply(10, 10000));
     }
 }
 
