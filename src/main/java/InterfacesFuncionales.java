@@ -1,5 +1,7 @@
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.function.*;
 
@@ -12,7 +14,9 @@ public class InterfacesFuncionales {
 //        usoConsumer();
 //        usoSupplier();
 //        usoFunction();
-        usoBifunction();
+//        usoBifunction();
+//        usoUnaryOperator();
+        usoBinaryOperator();
     }
 
     private static void usoPredicate() {
@@ -113,6 +117,51 @@ public class InterfacesFuncionales {
             System.out.println("******* Dentro de Function (lambda) ********");
             return "Después de andThen: " + x;
         }).apply(10, 10000));
+    }
+
+    private static void usoUnaryOperator() {
+        UnaryOperator<Integer> doble = x -> x * 2;
+//        System.out.println(doble.apply(10));
+
+        UnaryOperator<Persona> actualizarEdad = persona -> new Persona(persona.nombre, persona.edad * 2);
+        actualizarEdad.apply(new Persona("Juan", 30));
+
+//        UnaryOperator<String> op = String::toUpperCase;
+        UnaryOperator<String> op = s -> s.toUpperCase();
+        System.out.println(ejecutarUnaryOp(op, cadenas));
+        System.out.println(ejecutarUnaryOp(s -> s.toLowerCase(), cadenas));
+    }
+
+    private static List<String> ejecutarUnaryOp(UnaryOperator<String> unaryOp, List<String> lista) {
+        List<String> nuevaLista = new ArrayList<>();
+//        Consumer<String> consumer = s -> nuevaLista.add(unaryOp.apply(s));
+        lista.forEach(el -> nuevaLista.add(unaryOp.apply(el)));
+        return nuevaLista;
+    }
+
+    private static void usoBinaryOperator() {
+        BinaryOperator<String> binOp = (s, t) -> s + t;
+        System.out.println(binOp.apply("Hola", " mundo"));
+
+        BinaryOperator<String> reemplazo = (texto, palabra) -> texto.replace(palabra, "-_-");
+        String frase = "Tres tristes tigres comían trigo en un trigal";
+        String aReemplazar = "tr";
+        System.out.println(reemplazo.apply(frase, aReemplazar));
+
+        String cad1 = "ABC";
+        String cad2 = "DEF";
+        BinaryOperator<String> menor = BinaryOperator.minBy(String::compareToIgnoreCase);
+        System.out.println(menor.apply(cad1, cad2));
+
+        BinaryOperator<Double> mayor = BinaryOperator.maxBy(Double::compareTo);
+        System.out.println(mayor.apply(12.9, 20.5));
+
+        UnaryOperator<String> mayusculas = InterfacesFuncionales::mayusculas;
+        mayusculas.apply("");
+    }
+
+    private static String mayusculas(String s) {
+        return s.toUpperCase();
     }
 }
 
