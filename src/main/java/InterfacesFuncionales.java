@@ -173,4 +173,14 @@ class Persona {
         this.nombre = nombre;
         this.edad = edad;
     }
+
+    Persona(String nombre) {
+        this.nombre = nombre;
+        this.edad = nombre.length();
+    }
+
+    @Override
+    public String toString() {
+        return nombre + " (" + edad + ")";
+    }
 }
