@@ -5,11 +5,11 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class Streams {
-    static List<String> cadenas = Arrays.asList("Cadena 1", "Cadena 2", "Cadena 32123");
-    static List<Integer> numeros = Arrays.asList(1, 5, 7, 9, -12, 6754, 100);
+    static List<String> cadenas = Arrays.asList("Cadena 1", "Cadena 2", "Cadena 32123", "");
+    static List<Integer> numeros = Arrays.asList(1, 5, 7, 9, 12, 6754, 100);
 
     static List<Persona> personas = Arrays.asList(
-            new Persona("Juan", 20),
+            new Persona("Juan", 10),
             new Persona("Pedro", 30),
             new Persona("Ana", 30),
             new Persona("Sofía", 30)
@@ -18,7 +18,8 @@ public class Streams {
     public static void main(String[] args) {
 //        usoFilter();
 //        usoMap();
-        usoReduce();
+//        usoReduce();
+        usoMatch();
     }
 
     private static void usoForEach() {
@@ -70,5 +71,20 @@ public class Streams {
                 .filter(x -> x <= 8)
                 .reduce((acum, num) -> acum + num)
                 .ifPresent(System.out::println);
+    }
+
+    private static void usoMatch() {
+        // anyMatch, noneMatch, allMatch
+        Predicate<String> predicate = s -> s.length() == 0;
+        boolean hayCadenasVacias = cadenas.stream().anyMatch(predicate);
+        System.out.println(hayCadenasVacias);
+        boolean hayMayorEdad = personas.stream().anyMatch(p -> p.edad >= 38);
+        System.out.println(hayMayorEdad);
+
+        boolean hayNumerosNegativos = numeros.stream().noneMatch(x -> x < 0);
+        System.out.println(hayNumerosNegativos);
+
+        boolean mayoresEdad = personas.stream().allMatch(p -> p.edad >= 18);
+        System.out.println(mayoresEdad);
     }
 }
