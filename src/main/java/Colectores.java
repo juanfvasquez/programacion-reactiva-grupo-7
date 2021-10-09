@@ -15,7 +15,8 @@ public class Colectores {
 
     public static void main(String[] args) {
 //        collectorsBasicos();
-        collectorsColeccion();
+//        collectorsColeccion();
+        collectorsAgrupamiento();
     }
 
     private static void collectorsBasicos() {
@@ -79,7 +80,38 @@ public class Colectores {
         System.out.println(empleados.stream().distinct().collect(Collectors.toMap(keyMapper, valueMapper)));
     }
 
-    private static void collectorsAgrupamiento() {}
+    private static void collectorsAgrupamiento() {
+        Empleado juan = new Empleado("Juan", 2000, "Sistemas");
+        Empleado lucia = new Empleado("Lucía", 4000, "Ventas");
+        Empleado ana = new Empleado("Ana", 3000, "Compras");
+        Empleado pedro = new Empleado("Pedro", 2500, "Compras");
+
+        List<Empleado> empleados = Arrays.asList(juan, ana, lucia, pedro, juan);
+
+//        Map<Boolean, List<Empleado>> resultado = empleados.stream().collect(Collectors.partitioningBy(e -> e.getSalario() > 3000));
+        System.out.println(empleados.stream().collect(Collectors.partitioningBy(e -> e.getSalario() > 3000)));
+        System.out.println(empleados.stream().collect(Collectors.groupingBy(e -> e.getSalario() > 3000)));
+        System.out.println(empleados.stream().collect(Collectors.groupingBy(e -> e.getSalario())));
+        System.out.println(empleados.stream().collect(Collectors.groupingBy(e -> e.getArea())));
+        System.out.println(empleados.stream().collect(Collectors.groupingBy(e -> {
+            double total = 0;
+            double impuesto = e.getSalario() * .23;
+            if (e.getArea().equalsIgnoreCase("sistemas")) {
+                total += 3000;
+            }
+            return total + impuesto + e.getSalario();
+        })));
+
+        System.out.println(empleados.stream().collect(Collectors.partitioningBy(e -> e.getSalario() > 3000, Collectors.groupingBy(Empleado::getArea))));
+        System.out.println(empleados.stream().collect(Collectors.partitioningBy(e -> e.getSalario() > 3000, Collectors.groupingBy(Empleado::getSalario))));
+
+        System.out.println(
+                empleados.stream().collect(
+                        Collectors.partitioningBy(e -> e.getSalario() > 3000,
+                                Collectors.groupingBy(Empleado::getArea,
+                                        Collectors.counting())))
+        );
+    }
 }
 
 class Empleado {
