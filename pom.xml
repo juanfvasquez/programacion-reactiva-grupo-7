@@ -7,6 +7,11 @@
     <groupId>org.example</groupId>
     <artifactId>reactiva-g7</artifactId>
     <version>1.0-SNAPSHOT</version>
-
-
+    <dependencies>
+        <dependency>
+            <groupId>io.reactivex</groupId>
+            <artifactId>rxjava</artifactId>
+            <version>1.2.6</version>
+        </dependency>
+    </dependencies>
 </project>
